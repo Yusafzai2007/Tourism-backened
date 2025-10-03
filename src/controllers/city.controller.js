@@ -59,6 +59,7 @@ const getallcities = asynchandler(async (req, res) => {
     .json(new ApiResponse(202, { city: city }, "city data fetch successfully"));
 });
 
+
 const updateCity = asynchandler(async (req, res) => {
   const { id } = req.params;
   const { cityName, cityDescription, status } = req.body;

@@ -292,51 +292,41 @@ const updatedata = asynchandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, user, "update successfully"));
 });
 
+////////////////////////    Update Product Image Controller  /////////////////////////////////
 
+const updateimg = asynchandler(async (req, res) => {
+  const { id } = req.params;
+  const file = req.files?.thumbnailimage;
 
-
-const updateimg=asynchandler(async (req,res) => {
-  const {id}=req.params
-  const file=req.files?.thumbnailimage
-  
   if (!file) {
-    throw new apiError(400,"update img link is required")
+    throw new apiError(400, "update img link is required");
   }
 
-  let uploadedimg=[]
+  let uploadedimg = [];
   for (const img of file) {
-    const result=await cloudinaryimg(img.path)
+    const result = await cloudinaryimg(img.path);
     if (!result) {
-      throw new apiError(400,"cloudinari img is not uploaded")
+      throw new apiError(400, "cloudinari img is not uploaded");
     }
-    uploadedimg.push(result.url)
+    uploadedimg.push(result.url);
   }
 
+  const updateimages = await Product.findByIdAndUpdate(
+    id,
+    {
+      $set: { thumbnailimage: uploadedimg }, // field specify karna zaroori hai
+    },
+    { new: true }
+  );
 
- const updateimages = await Product.findByIdAndUpdate(
-  id,
-  {
-    $set: { thumbnailimage: uploadedimg }   // field specify karna zaroori hai
-  },
-  { new: true }
-);
+  if (!updateimages) {
+    throw new apiError(500, "server errpo");
+  }
 
-    if (!updateimages) {
-      throw new apiError(500,"server errpo")
-    }
-
-    res.status(200).json(
-      new ApiResponse(200,updateimages,"product updateimg successfully")
-    )
-
-})
-
-
-
-
-
-
-
+  res
+    .status(200)
+    .json(new ApiResponse(200, updateimages, "product updateimg successfully"));
+});
 
 export {
   registerProduct,
@@ -344,5 +334,5 @@ export {
   getproducts,
   getsinglecity,
   updatedata,
-  updateimg
+  updateimg,
 };
