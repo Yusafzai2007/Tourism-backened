@@ -33,4 +33,26 @@ import SignupRoute from "./routes/signup.route.js";
 
 app.use("/api/v1/tourism", SignupRoute);
 
+
+
+
+
+//////////////  import booking //////////////////
+
+import bookingRoute from "./routes/booking.route.js";
+
+app.use("/api/v1/tourism", bookingRoute);
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default app;
